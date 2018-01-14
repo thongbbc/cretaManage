@@ -42,7 +42,7 @@ app.use(express.static("public"));
 app.post("/login",urlencodedParser,function(req,res){
   account.find({username:req.body.username,password:req.body.password}, function(err, data) {
     if (data.length!=0) {
-      res.send({status:'OK'})
+      res.send({status:'OK',rule:data[0].rule})
     } else {
       res.send({status:'ERROR'})
     }
