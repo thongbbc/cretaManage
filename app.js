@@ -63,33 +63,7 @@ app.post('/signUp',urlencodedParser,function(req,res) {
 		    console.log("Da them vao database");
 		});
 })
-app.post('/addCustomer',urlencodedParser,function(req,res) {
-  var Customer = customer({
-    phone:req.body.phone,
-    name: req.body.name,
-    address: req.body.address,
-    location:req.body.location,
-    cost:req.body.cost,
-    note:req.body.note,
-    employee:req.body.employee
-    });
-    Customer.save(function(err) {
-        if (err) {res.send({status:"ERROR"})};
-        res.send({status:'OK'})
-        console.log("Da them vao database");
-    });
-})
 
-app.get('/removeCustomer',function(req,res) {
-      customer.remove({},function(err){
-        if (!err) {
-          res.send({status:'OK'})
-        } else {
-          res.send({status:'ERROR'})
-        }
-      })
-
-})
 app.get('/removeAccount',function(req,res) {
 		 	account.remove({},function(err){
 		 		if (!err) {
