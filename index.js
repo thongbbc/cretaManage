@@ -34,10 +34,12 @@ mongoose.connect("mongodb://root:123@ds249727.mlab.com:49727/cretamanage");
 app.set("view engine", "ejs");
 app.set("views","./views");
 app.use(express.static("public"));
+app.use(express.static("assets"));
 
 
-
-
+app.get("/",function(req,res){
+    res.render('trangchu')
+})
 
 app.post("/login",urlencodedParser,function(req,res){
   account.find({username:req.body.username,password:req.body.password}, function(err, data) {
