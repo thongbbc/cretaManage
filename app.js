@@ -64,14 +64,10 @@ app.post('/signUp',urlencodedParser,function(req,res) {
 		});
 })
 
-app.get("/allCustomer",function(req,res){
-  customer.find({}, function(err, data) {
-    if (data.length!=0) {
-      res.send({data:data})
-    } else {
-      res.send({status:'ERROR'})
-    }
-  })
+
+app.get('/hehe',function(req,res) {
+		 	res.send({status:'hehe'})
+
 })
 
 app.get('/removeAccount',function(req,res) {
