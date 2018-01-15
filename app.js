@@ -63,23 +63,19 @@ app.post('/signUp',urlencodedParser,function(req,res) {
 		    console.log("Da them vao database");
 		});
 })
-
-
-app.get('/hehe',function(req,res) {
-		 	res.send({status:'hehe'})
-
+app.post('/allCustomer',urlencodedParser,function(req,res) {
+	if (req.body.password == '123')
+	customer.find({}, function(err, data) {
+    if (data.length!=0) {
+      res.send({status:'OK',data:data})
+    } else {
+      res.send({status:'ERROR'})
+    } else {
+    	res.send({status:'ERROR'})
+    }
+  })
 })
 
-app.get('/removeAccount',function(req,res) {
-		 	account.remove({},function(err){
-		 		if (!err) {
-		 			res.send({status:'OK'})
-		 		} else {
-		 			res.send({status:'ERROR'})
-		 		}
-		 	})
-
-})
 
 
 io.on('connection', function(socket) {
