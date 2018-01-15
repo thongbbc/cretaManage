@@ -63,6 +63,17 @@ app.post('/signUp',urlencodedParser,function(req,res) {
 		    console.log("Da them vao database");
 		});
 })
+app.post('/customer',urlencodedParser,function(req,res) {
+	if (req.body.password == '123')
+	customer.find({}, function(err, data) {
+    if (data.length!=0) {
+      res.json(data)
+    } else {
+      res.send({status:'OK'})
+    }
+  })
+})
+
 
 app.get('/removeAccount',function(req,res) {
 		 	account.remove({},function(err){
