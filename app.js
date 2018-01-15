@@ -37,7 +37,9 @@ app.use(express.static("public"));
 
 
 
-
+app.get("/",function(req.res) {
+	res.send("HELLO")
+})
 
 app.post("/login",urlencodedParser,function(req,res){
   account.find({username:req.body.username,password:req.body.password}, function(err, data) {
