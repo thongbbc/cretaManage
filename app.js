@@ -63,7 +63,7 @@ app.post('/signUp',urlencodedParser,function(req,res) {
 		    console.log("Da them vao database");
 		});
 })
-app.post('/customer',urlencodedParser,function(req,res) {
+app.post('/allCustomer',urlencodedParser,function(req,res) {
 	if (req.body.password == '123')
 	customer.find({}, function(err, data) {
     if (data.length!=0) {
