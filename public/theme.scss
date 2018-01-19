@@ -225,9 +225,16 @@ body > * {
 	left:0%;
   &.out-of-viewport {
     opacity:0;
-    left:5%;
+    left:5%
   }
 }
 .mainTitle {
 	color:gray
+}
+.fontFamily {
+  font-size:120%;
+	 font-family: 'Time New Roman';
+}
+.fontFamily2 {
+	 font-family: 'Times New Roman';
 }

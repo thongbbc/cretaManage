@@ -5694,3 +5694,10 @@ body > * {
 
 .mainTitle {
   color: gray; }
+
+.fontFamily {
+  font-size: 120%;
+  font-family: 'Time New Roman'; }
+
+.fontFamily2 {
+  font-family: 'Times New Roman'; }
