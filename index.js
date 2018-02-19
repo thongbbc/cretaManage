@@ -115,6 +115,19 @@ app.post('/allCustomer',urlencodedParser,function(req,res) {
       res.send({status:'ERROR'})
     }
 })
+app.post('/listCustomer',urlencodedParser,function(req,res) {
+  if (req.body.password == '123'){
+    customer.find({employee:req.body.username}, function(err, data) {
+        if (data.length!=0) {
+          res.send({status:'OK',data:data})
+        } else {
+          res.send({status:'ERROR'})
+        }
+    })
+    } else {
+      res.send({status:'ERROR'})
+    }
+})
 
 
 io.on('connection', function(socket) {
