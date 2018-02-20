@@ -17,18 +17,20 @@ var account = new Schema({
     rule:String,
 });
 var customer = new Schema({
+    id:String,
     phone:String,
     name: String,
     address: String,
     location:String,
     cost:String,
     note:String,
-    employee:String
+    employee:String,
+    check:Boolean
 });
 
 var account = mongoose.model("Account",account);
 var customer = mongoose.model("Customer", customer);
-
+const password = '123'
 mongoose.connect("mongodb://root:123@ds249727.mlab.com:49727/cretamanage");
 
 app.set("view engine", "ejs");
@@ -66,15 +68,21 @@ app.post('/signUp',urlencodedParser,function(req,res) {
 		});
 })
 app.post('/addCustomer',urlencodedParser,function(req,res) {
+  var idRandom = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (var i = 0; i < 5; i++)
+    idRandom += possible.charAt(Math.floor(Math.random() * possible.length));
   var Customer = customer({
+    id:"CRE"+idRandom,
     phone:req.body.phone,
     name: req.body.name,
     address: req.body.address,
     location:req.body.location,
     cost:req.body.cost,
     note:req.body.note,
-    employee:req.body.employee
-    });
+    employee:req.body.employee,
+    check:false
+  });
     Customer.save(function(err) {
         if (err) {res.send({status:"ERROR"})};
         res.send({status:'OK'})
@@ -82,7 +90,22 @@ app.post('/addCustomer',urlencodedParser,function(req,res) {
     });
 })
 
-app.get('/removeCustomer',function(req,res) {
+app.post('/removeCustomer',function(req,res) {
+  if (req.body.password == password){
+    customer.remove({id:req.body.id},function(err){
+        if (!err) {
+          res.send({status:'OK'})
+        } else {
+          res.send({status:'ERROR'})
+        }
+      })
+  } else {
+    res.send({status:'ERROR'})
+  }    
+})
+
+
+app.get('/removeAllCustomer',function(req,res) {
       customer.remove({},function(err){
         if (!err) {
           res.send({status:'OK'})
@@ -103,7 +126,7 @@ app.get('/removeAccount',function(req,res) {
 
 })
 app.post('/allCustomer',urlencodedParser,function(req,res) {
-  if (req.body.password == '123'){
+  if (req.body.password == password){
     customer.find({}, function(err, data) {
         if (data.length!=0) {
           res.send({status:'OK',data:data})
@@ -116,7 +139,7 @@ app.post('/allCustomer',urlencodedParser,function(req,res) {
     }
 })
 app.post('/listCustomer',urlencodedParser,function(req,res) {
-  if (req.body.password == '123'){
+  if (req.body.password == password){
     customer.find({employee:req.body.username}, function(err, data) {
         if (data.length!=0) {
           res.send({status:'OK',data:data})
