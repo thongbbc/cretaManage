@@ -138,6 +138,19 @@ app.post('/allCustomer',urlencodedParser,function(req,res) {
       res.send({status:'ERROR'})
     }
 })
+app.post('/checkCustomer',urlencodedParser,function(req,res) {
+    if (req.body.password == password){
+      customer.update({id:req.body.id},{$set: {check:req.body.check}}, function(err) {
+          if (!err) {
+            res.send({status:'OK'})
+          } else {
+            res.send({status:'ERROR'})
+          }
+      })
+    } else {
+      res.send({status:'ERROR'})
+    }
+})
 app.post('/listCustomer',urlencodedParser,function(req,res) {
   if (req.body.password == password){
     customer.find({employee:req.body.username}, function(err, data) {
