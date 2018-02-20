@@ -90,7 +90,7 @@ app.post('/addCustomer',urlencodedParser,function(req,res) {
     });
 })
 
-app.post('/removeCustomer',function(req,res) {
+app.post('/removeCustomer',urlencodedParser,function(req,res) {
   if (req.body.password == password){
     customer.remove({id:req.body.id},function(err){
         if (!err) {
