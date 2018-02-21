@@ -6,8 +6,9 @@ var port = process.env.PORT || 9999;
 var mongoose = require("mongoose");
 var bodyParser=require("body-parser")
 var urlencodedParser=bodyParser.urlencoded({extended:false})
-
 var Schema = mongoose.Schema;
+
+import pushNotification from './pushNotification'
 
 var account = new Schema({
     username:String,
@@ -31,7 +32,7 @@ var customer = new Schema({
 var account = mongoose.model("Account",account);
 var customer = mongoose.model("Customer", customer);
 const password = '123'
-mongoose.connect("mongodb://root:123@ds249727.mlab.com:49727/cretamanage");
+mongoose.createConnection("mongodb://root:123@ds249727.mlab.com:49727/cretamanage");
 
 app.set("view engine", "ejs");
 app.set("views","./views");
@@ -42,6 +43,22 @@ app.use(express.static("assets"));
 app.get("/",function(req,res){
     res.render('trangchu')
 })
+
+
+app.post("/pushNotificationAll",urlencodedParser,pushNotification)
+
+
+
+app.post("/login",urlencodedParser,function(req,res){
+  account.find({username:req.body.username,password:req.body.password}, function(err, data) {
+    if (data.length!=0) {
+      res.send({status:'OK',rule:data[0].rule})
+    } else {
+      res.send({status:'ERROR'})
+    }
+  })
+})
+
 
 app.post("/login",urlencodedParser,function(req,res){
   account.find({username:req.body.username,password:req.body.password}, function(err, data) {
