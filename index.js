@@ -100,7 +100,7 @@ app.post("/registerTokenNotification",urlencodedParser,function(req,res){
     if (data.length!=0) {
       res.send({status:'ERROR'})
     } else {
-      account.update({id:req.body.username},{$set: {tokenNotification:req.body.tokenNotification}}, function(err) {
+      account.update({username:req.body.username},{$set: {tokenNotification:req.body.tokenNotification}}, function(err) {
           if (!err) {
             res.send({status:'OK'})
           } else {
