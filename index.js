@@ -76,8 +76,10 @@ app.post("/pushNotificationAll",urlencodedParser,function pushNotification(req, 
       }
       let chunks = expo.chunkPushNotifications(messages);
       chunkFunction(chunks)
-      res.json({status:'OK'})
+      console.log("SUCCESS")
+      // res.json({status:'OK'})
     } else {
+      console.log("ERROR NOTIFICATION")
       res.send({status:'ERROR'})
     }
   })
