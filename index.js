@@ -32,7 +32,7 @@ var customer = new Schema({
 var account = mongoose.model("Account",account);
 var customer = mongoose.model("Customer", customer);
 const password = '123'
-mongoose.createConnection("mongodb://root:123@ds249727.mlab.com:49727/cretamanage");
+mongoose.connect("mongodb://root:123@ds249727.mlab.com:49727/cretamanage");
 
 app.set("view engine", "ejs");
 app.set("views","./views");
