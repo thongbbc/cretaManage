@@ -8,7 +8,9 @@ var bodyParser=require("body-parser")
 var urlencodedParser=bodyParser.urlencoded({extended:false})
 var Schema = mongoose.Schema;
 
-import pushNotification from './pushNotification'
+import Expo from 'expo-server-sdk';
+
+let expo = new Expo();
 
 var account = new Schema({
     username:String,
@@ -16,6 +18,7 @@ var account = new Schema({
     name:String,
     phone:String,
     rule:String,
+    tokenNotification:String
 });
 var customer = new Schema({
     id:String,
@@ -44,8 +47,42 @@ app.get("/",function(req,res){
     res.render('trangchu')
 })
 
-
-app.post("/pushNotificationAll",urlencodedParser,pushNotification)
+async function chunkFunction(chunks) {
+  for (let chunk of chunks) {
+        try {
+          let receipts = await expo.sendPushNotificationsAsync(chunk);
+          console.log(receipts);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+}
+app.post("/pushNotificationAll",urlencodedParser,function pushNotification(req, res) {
+  const {message, data} = req.body;
+  account.find({}, function(err, data) {
+    if (data.length!=0) {
+      let messages = [];
+      for (var i=0 ;i< data.length;i++) {
+        if (!Expo.isExpoPushToken(data[i].tokenNotification)) {
+          console.error(`Push token ${data[i].tokenNotification} is not a valid Expo push token`);
+          continue;
+        }
+        messages.push({
+          to: data[i].tokenNotification,
+          sound: 'default',
+          body: 'This is a test notification',
+          data: { withSome: 'data' },
+        })        
+      }
+      let chunks = expo.chunkPushNotifications(messages);
+      chunkFunction(chunks)
+      res.json({status:'OK'})
+    } else {
+      res.send({status:'ERROR'})
+    }
+  })
+  
+})
 
 
 
@@ -58,7 +95,21 @@ app.post("/login",urlencodedParser,function(req,res){
     }
   })
 })
-
+app.post("/registerTokenNotification",urlencodedParser,function(req,res){
+  account.find({tokenNotification:req.body.tokenNotification}, function(err, data) {
+    if (data.length!=0) {
+      res.send({status:'ERROR'})
+    } else {
+      account.update({id:req.body.username},{$set: {tokenNotification:req.body.tokenNotification}}, function(err) {
+          if (!err) {
+            res.send({status:'OK'})
+          } else {
+            res.send({status:'ERROR'})
+          }
+      })
+    }
+  })
+})
 
 app.post("/login",urlencodedParser,function(req,res){
   account.find({username:req.body.username,password:req.body.password}, function(err, data) {
