@@ -86,7 +86,19 @@ app.post("/pushNotificationAll",urlencodedParser,function pushNotification(req, 
   
 })
 
-
+app.post("/changeOwner",urlencodedParser,function(req,res){
+  if (req.body.password == password){
+    customer.update({id:req.body.id},{$set: {employee:req.body.employee}}, function(err) {
+        if (!err) {
+          res.send({status:'OK'})
+        } else {
+          res.send({status:'ERROR'})
+        }
+    })
+  } else {
+    res.send({status:'ERROR'})
+  }
+})
 
 app.post("/registerTokenNotification",urlencodedParser,function(req,res){
   account.find({tokenNotification:req.body.tokenNotification}, function(err, data) {
