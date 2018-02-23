@@ -295,9 +295,18 @@ app.post('/findCustomer',urlencodedParser,function(req,res) {
 
 app.post('/listCustomer',urlencodedParser,function(req,res) {
   if (req.body.password == password){
-    customer.find({employee:req.body.username}, function(err, data) {
+    customer.find({}, function(err, data) {
         if (data.length!=0) {
-          res.send({status:'OK',data:data})
+          var listContract = []
+          for (var i =0 ;i<data.length;i++) {
+            var jsonEmployee = JSON.parse(data[i].employee)
+            for (var j =0 ;j<jsonEmployee.length;j++) {
+              if (jsonEmployee[j].username == req.body.username) {
+                listContract.push(data[i])
+              }
+            }
+          }
+          res.send({status:'OK',data:listContract})
         } else {
           res.send({status:'OK'})
         }
