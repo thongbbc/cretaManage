@@ -256,7 +256,7 @@ app.post('/editCustomer',urlencodedParser,function(req,res) {
 
 app.post('/findCustomer',urlencodedParser,function(req,res) {
   if (req.body.password == password){
-    customer.find({id:id}, function(err, data) {
+    customer.find({id:req.body.id}, function(err, data) {
         if (data.length!=0) {
           res.send({status:'OK',data:data})
         } else {
