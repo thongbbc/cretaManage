@@ -88,15 +88,6 @@ app.post("/pushNotificationAll",urlencodedParser,function pushNotification(req, 
 
 
 
-app.post("/login",urlencodedParser,function(req,res){
-  account.find({username:req.body.username,password:req.body.password}, function(err, data) {
-    if (data.length!=0) {
-      res.send({status:'OK',rule:data[0].rule})
-    } else {
-      res.send({status:'ERROR'})
-    }
-  })
-})
 app.post("/registerTokenNotification",urlencodedParser,function(req,res){
   account.find({tokenNotification:req.body.tokenNotification}, function(err, data) {
     if (data.length!=0) {
@@ -113,10 +104,32 @@ app.post("/registerTokenNotification",urlencodedParser,function(req,res){
   })
 })
 
+app.post("/allAccountLevel0",urlencodedParser,function(req,res){
+  if (req.body.password == password){
+    account.find({rule:"0"}, function(err, data) {
+      if (!err)
+        if (data.length!=0) {
+          res.send({status:'OK',data:data})
+        } else {
+          res.send({status:'OK'})
+        } 
+      else {
+        res.send({status:'ERROR'})
+      }
+    })
+  } else {
+      res.send({status:'ERROR'})
+  }
+})
+
+
 app.post("/login",urlencodedParser,function(req,res){
   account.find({username:req.body.username,password:req.body.password}, function(err, data) {
+    if (!err)
     if (data.length!=0) {
       res.send({status:'OK',rule:data[0].rule})
+    } else {
+      res.send({status:'ERROR'})
     } else {
       res.send({status:'ERROR'})
     }
