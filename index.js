@@ -29,7 +29,7 @@ var customer = new Schema({
     cost:String,
     note:String,
     employee:String,
-    check:Boolean
+    check:String
 });
 
 var account = mongoose.model("Account",account);
@@ -151,7 +151,7 @@ app.post('/addCustomer',urlencodedParser,function(req,res) {
     cost:req.body.cost,
     note:req.body.note,
     employee:req.body.employee,
-    check:false
+    check:0
   });
     Customer.save(function(err) {
         if (err) {res.send({status:"ERROR"})};
@@ -225,6 +225,24 @@ app.post('/checkCustomer',urlencodedParser,function(req,res) {
 app.post('/saveNote',urlencodedParser,function(req,res) {
     if (req.body.password == password){
       customer.update({id:req.body.id},{$set: {note:req.body.note}}, function(err) {
+          if (!err) {
+            res.send({status:'OK'})
+          } else {
+            res.send({status:'ERROR'})
+          }
+      })
+    } else {
+      res.send({status:'ERROR'})
+    }
+})
+
+app.post('/editCustomer',urlencodedParser,function(req,res) {
+  if (req.body.password == password){
+      customer.update({id:req.body.id},{$set: {
+        phone:req.body.phone,
+        name: req.body.name,
+        employee:req.body.employee
+      }}, function(err) {
           if (!err) {
             res.send({status:'OK'})
           } else {
