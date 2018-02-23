@@ -201,7 +201,7 @@ app.post('/allCustomer',urlencodedParser,function(req,res) {
         if (data.length!=0) {
           res.send({status:'OK',data:data})
         } else {
-          res.send({status:'ERROR'})
+          res.send({status:'OK'})
         }
     })
     } else {
@@ -254,6 +254,19 @@ app.post('/editCustomer',urlencodedParser,function(req,res) {
     }
 })
 
+app.post('/findCustomer',urlencodedParser,function(req,res) {
+  if (req.body.password == password){
+    customer.find({id:id}, function(err, data) {
+        if (data.length!=0) {
+          res.send({status:'OK',data:data})
+        } else {
+          res.send({status:'ERROR'})
+        }
+    })
+    } else {
+      res.send({status:'ERROR'})
+    }
+})
 
 app.post('/listCustomer',urlencodedParser,function(req,res) {
   if (req.body.password == password){
@@ -261,7 +274,7 @@ app.post('/listCustomer',urlencodedParser,function(req,res) {
         if (data.length!=0) {
           res.send({status:'OK',data:data})
         } else {
-          res.send({status:'ERROR'})
+          res.send({status:'OK'})
         }
     })
     } else {
