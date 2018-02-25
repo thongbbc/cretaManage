@@ -307,7 +307,7 @@ app.post('/allCustomer',urlencodedParser,function(req,res) {
         if (data.length!=0) {
           res.send({status:'OK',data:data})
         } else {
-          res.send({status:'OK'})
+          res.send({status:'OK',data:data})
         }
     })
     } else {
@@ -366,7 +366,7 @@ app.post('/findCustomer',urlencodedParser,function(req,res) {
         if (data.length!=0) {
           res.send({status:'OK',data:data})
         } else {
-          res.send({status:'ERROR'})
+          res.send({status:'OK',data:data})
         }
     })
     } else {
