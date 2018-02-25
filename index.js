@@ -316,13 +316,13 @@ app.post('/allCustomer',urlencodedParser,function(req,res) {
 })
 app.post('/checkCustomer',urlencodedParser,function(req,res) {
     if (req.body.password == password){
-      customer.update({id:req.body.id},{$set: {check:req.body.check}}, function(err) {
-          if (!err) {
-            res.send({status:'OK'})
-          } else {
-            res.send({status:'ERROR'})
-          }
-      })
+        customer.update({id:req.body.id},{$set: {check:req.body.check}}, function(err) {
+            if (!err) {
+              res.send({status:'OK'})
+            } else {
+              res.send({status:'ERROR'})
+            }
+        })
     } else {
       res.send({status:'ERROR'})
     }
@@ -330,12 +330,18 @@ app.post('/checkCustomer',urlencodedParser,function(req,res) {
 
 app.post('/saveNote',urlencodedParser,function(req,res) {
     if (req.body.password == password){
-      customer.update({id:req.body.id},{$set: {note:req.body.note}}, function(err) {
-          if (!err) {
-            res.send({status:'OK'})
-          } else {
-            res.send({status:'ERROR'})
-          }
+      var timeStamp = getTimeStamp()
+      customer.find({id:req.body.id}, function(err, data) {
+      var note = data[0].note
+      const currentTime = getDay(timeStamp)+"/"+getMonth(timeStamp)+"/"+getYear(timeStamp)
+      note += "\n"+"+"+currentTime+"\n"+req.body.note
+        customer.update({id:req.body.id},{$set: {note:note}}, function(err) {
+            if (!err) {
+              res.send({status:'OK'})
+            } else {
+              res.send({status:'ERROR'})
+            }
+        })
       })
     } else {
       res.send({status:'ERROR'})
