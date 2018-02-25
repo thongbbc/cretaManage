@@ -106,7 +106,7 @@ function getSeconds(timeStamp) {
 app.post("/pushNotificationWithUsername",urlencodedParser,function pushNotification(req, res) {
   const {message,data} = req.body;
   account.find({}, function(err, data2) {
-    var arrayUsername = req.body.username
+    var arrayUsername = JSON.parse(req.body.username)
     if (data2.length!=0) {
       let messages = [];
       for (var i=0 ;i< arrayUsername.length;i++) {
