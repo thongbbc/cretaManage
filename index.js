@@ -334,7 +334,7 @@ app.post('/saveNote',urlencodedParser,function(req,res) {
       customer.find({id:req.body.id}, function(err, data) {
       var note = data[0].note
       const currentTime = getDay(timeStamp)+"/"+getMonth(timeStamp)+"/"+getYear(timeStamp)
-      note += "\n\n"+"at "+currentTime+"\n\n"+" _ "+req.body.note
+      note += "\n\n"+"at "+currentTime+"\n"+" _ "+req.body.note
         customer.update({id:req.body.id},{$set: {note:note}}, function(err) {
             if (!err) {
               res.send({status:'OK'})
