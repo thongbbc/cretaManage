@@ -105,16 +105,18 @@ function getSeconds(timeStamp) {
 
 app.post("/pushNotificationWithUsername",urlencodedParser,function pushNotification(req, res) {
   const {message,data} = req.body;
-  account.find({username:req.body.username}, function(err, data2) {
+  account.find({}, function(err, data2) {
+    var arrayUsername = req.body.username
     if (data2.length!=0) {
       let messages = [];
-      for (var i=0 ;i< data2.length;i++) {
-        if (!Expo.isExpoPushToken(data2[i].tokenNotification)) {
+      for (var i=0 ;i< arrayUsername.length;i++) {
+        const value = data2.find((value)=>value.username==arrayUsername[i].username);
+        if (!Expo.isExpoPushToken(value.tokenNotification)) {
           console.error(`Push token ${data2[i].tokenNotification} is not a valid Expo push token`);
           continue;
         }
         messages.push({
-          to: data2[i].tokenNotification,
+          to: value.tokenNotification,
           sound: 'default',
           body: message,
           data: { data: data },
