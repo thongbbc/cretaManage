@@ -102,6 +102,37 @@ function getSeconds(timeStamp) {
   return seconds;
 }
 
+
+app.post("/pushNotificationWithUsername",urlencodedParser,function pushNotification(req, res) {
+  const {message,data} = req.body;
+  account.find({username:req.body.username}, function(err, data2) {
+    if (data2.length!=0) {
+      let messages = [];
+      for (var i=0 ;i< data2.length;i++) {
+        if (!Expo.isExpoPushToken(data2[i].tokenNotification)) {
+          console.error(`Push token ${data2[i].tokenNotification} is not a valid Expo push token`);
+          continue;
+        }
+        messages.push({
+          to: data2[i].tokenNotification,
+          sound: 'default',
+          body: message,
+          data: { data: data },
+        })        
+      }
+      let chunks = expo.chunkPushNotifications(messages);
+      chunkFunction(chunks)
+      console.log("SUCCESS")
+      res.json({status:'OK'})
+    } else {
+      console.log("ERROR NOTIFICATION")
+      res.send({status:'ERROR'})
+    }
+  })
+  
+})
+
+
 app.post("/pushNotificationAll",urlencodedParser,function pushNotification(req, res) {
   const {message, data} = req.body;
   account.find({}, function(err, data) {
