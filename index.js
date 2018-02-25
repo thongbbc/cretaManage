@@ -149,7 +149,7 @@ app.post("/pushNotificationAll",urlencodedParser,function pushNotification(req, 
           to: data2[i].tokenNotification,
           sound: 'default',
           body: message,
-          data: { data: data.data },
+          data: { data: data },
         })        
       }
       let chunks = expo.chunkPushNotifications(messages);
