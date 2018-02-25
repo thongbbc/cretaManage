@@ -29,7 +29,9 @@ var customer = new Schema({
     cost:String,
     note:String,
     employee:String,
-    check:String
+    check:String,
+    by:String,
+    time:String,
 });
 
 var account = mongoose.model("Account",account);
@@ -57,6 +59,49 @@ async function chunkFunction(chunks) {
         }
       }
 }
+
+function getTimeStamp() {
+  var d = new Date();
+  var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  return new Date(utc + (3600000*7)) / 1000;
+}
+function getDayOfWeek(timeStamp) {
+  var date = new Date(timeStamp*1000)
+  var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var dayOfWeek = days[date.getDay()]
+  return dayOfWeek
+}
+function getDay(timeStamp) {
+  var date = new Date(timeStamp*1000)
+  var day = date.getDate()
+  return day
+}
+function getMonth(timeStamp) {
+  var date = new Date(timeStamp*1000)
+  var month = date.getMonth() + 1
+  return month
+}
+function getYear(timeStamp) {
+  var date = new Date(timeStamp*1000)
+  var year = date.getFullYear()
+  return year
+}
+function getHours(timeStamp) {
+  var date = new Date(timeStamp*1000)
+  var hours = date.getHours()
+  return hours;
+}
+function getMinutes(timeStamp) {
+  var date = new Date(timeStamp*1000)
+  var minutes = date.getMinutes()
+  return minutes;
+}
+function getSeconds(timeStamp) {
+  var date = new Date(timeStamp*1000)
+  var seconds = date.getSeconds()
+  return seconds;
+}
+
 app.post("/pushNotificationAll",urlencodedParser,function pushNotification(req, res) {
   const {message, data} = req.body;
   account.find({}, function(err, data) {
@@ -164,6 +209,7 @@ app.post('/signUp',urlencodedParser,function(req,res) {
 })
 app.post('/addCustomer',urlencodedParser,function(req,res) {
   var idRandom = "";
+  var timeStamp = getTimeStamp()
   var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   for (var i = 0; i < 5; i++)
     idRandom += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -176,7 +222,9 @@ app.post('/addCustomer',urlencodedParser,function(req,res) {
     cost:req.body.cost,
     note:req.body.note,
     employee:req.body.employee,
-    check:0
+    check:0,
+    by:req.body.by,
+    time:timeStamp.toString()
   });
     Customer.save(function(err) {
         if (err) {res.send({status:"ERROR"})};
