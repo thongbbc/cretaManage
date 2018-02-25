@@ -137,19 +137,19 @@ app.post("/pushNotificationWithUsername",urlencodedParser,function pushNotificat
 
 app.post("/pushNotificationAll",urlencodedParser,function pushNotification(req, res) {
   const {message, data} = req.body;
-  account.find({}, function(err, data) {
-    if (data.length!=0) {
+  account.find({}, function(err, data2) {
+    if (data2.length!=0) {
       let messages = [];
-      for (var i=0 ;i< data.length;i++) {
-        if (!Expo.isExpoPushToken(data[i].tokenNotification)) {
-          console.error(`Push token ${data[i].tokenNotification} is not a valid Expo push token`);
+      for (var i=0 ;i< data2.length;i++) {
+        if (!Expo.isExpoPushToken(data2[i].tokenNotification)) {
+          console.error(`Push token ${data2[i].tokenNotification} is not a valid Expo push token`);
           continue;
         }
         messages.push({
-          to: data[i].tokenNotification,
+          to: data2[i].tokenNotification,
           sound: 'default',
-          body: 'This is a test notification',
-          data: { withSome: 'data' },
+          body: message,
+          data: { data: data.data },
         })        
       }
       let chunks = expo.chunkPushNotifications(messages);
